@@ -2,52 +2,50 @@
   <rect width="1440" height="760" fill="#071827"/>
   <rect width="1440" height="44" fill="#11141A"/>
   <text x="18" y="27" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">&gt;&gt;</text>
-  <text x="1300" y="27" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Stop</text>
-  <text x="1350" y="27" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Deploy</text>
+  <text x="1366" y="27" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Deploy</text>
+  <circle cx="1420" cy="22" r="2" fill="#D8DEEA"/>
+  <circle cx="1420" cy="28" r="2" fill="#D8DEEA"/>
+  <circle cx="1420" cy="34" r="2" fill="#D8DEEA"/>
 
-  <rect x="60" y="86" width="1320" height="150" rx="10" fill="#07111F" stroke="#1D2A3A"/>
-  <text x="84" y="152" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="800">AI Study Path Planner</text>
-  <text x="84" y="190" fill="#D6DEEC" font-family="Segoe UI, Arial, sans-serif" font-size="17">An Azure Foundry + A2A workspace that turns a learning goal into a clear, practical study path. Tune the goal, check the agents, and generate a plan ready</text>
-  <text x="84" y="216" fill="#D6DEEC" font-family="Segoe UI, Arial, sans-serif" font-size="17">to follow.</text>
+  <rect x="60" y="84" width="1320" height="150" rx="10" fill="#07111F" stroke="#1D2A3A"/>
+  <text x="84" y="150" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="800">AI Study Path Planner</text>
+  <text x="84" y="188" fill="#D6DEEC" font-family="Segoe UI, Arial, sans-serif" font-size="17">An Azure Foundry + A2A workspace that turns a learning goal into a clear, practical study path. Tune the goal, check the agents, and generate a plan ready</text>
+  <text x="84" y="214" fill="#D6DEEC" font-family="Segoe UI, Arial, sans-serif" font-size="17">to follow.</text>
 
-  <text x="60" y="288" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800">Request</text>
-  <rect x="60" y="306" width="540" height="226" rx="8" fill="#091423" stroke="#253448"/>
-  <text x="72" y="332" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Prompt</text>
-  <rect x="72" y="346" width="516" height="138" rx="7" fill="#2B2C35"/>
-  <text x="82" y="376" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">I want to learn the basics of JavaScript in 7 days, spending 1 hour per day. Organize a detailed plan for me in a</text>
-  <text x="82" y="400" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">Markdown table. The columns must be: Day, Main Topic, Key Concept to understand, and a 1-line mini-exercise</text>
-  <text x="82" y="424" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">or quiz to test myself at the end of the day.</text>
-  <rect x="72" y="498" width="516" height="34" rx="7" fill="#FF110B"/>
-  <text x="290" y="520" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Generate study plan</text>
+  <text x="60" y="294" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800">Request</text>
+  <rect x="60" y="312" width="540" height="226" rx="8" fill="#091423" stroke="#253448"/>
+  <text x="72" y="338" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Prompt</text>
 
-  <text x="648" y="288" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800">Output</text>
-  <circle cx="656" cy="318" r="6" stroke="#95A4B8" stroke-width="2"/>
-  <text x="674" y="324" fill="#D8E1F0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Generating the study plan...</text>
-  <rect x="648" y="348" width="736" height="44" rx="6" fill="#0F2A47"/>
-  <text x="660" y="375" fill="#236CA5" font-family="Segoe UI, Arial, sans-serif" font-size="16">Adjust the request and generate a plan when the backend is online.</text>
+  <rect x="72" y="354" width="516" height="138" rx="7" fill="#2B2C35" stroke="#FF4B4B"/>
+  <text x="82" y="382" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">I want to learn the basics of JavaScript in 7 days, spending 1 hour per day. Organize a detailed plan for me in a</text>
+  <text x="82" y="406" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">Markdown table. The columns must be: Day, Main Topic, Key Concept to understand, and a 1-line mini-exercise</text>
+  <text x="82" y="430" fill="#F0F3FA" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600">or quiz to test myself at the end of the day.</text>
+  <text x="462" y="486" fill="#AEB6C5" font-family="Segoe UI, Arial, sans-serif" font-size="12">Press Ctrl+Enter to submit form</text>
+  <rect x="72" y="506" width="516" height="34" rx="7" fill="#FF4B4B"/>
+  <text x="290" y="528" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Generate study plan</text>
 
-  <text x="648" y="430" fill="#8792A3" opacity="0.58" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">The expected local services are:</text>
-  <circle cx="652" cy="470" r="3" fill="#8792A3" opacity="0.55"/>
-  <text x="668" y="476" fill="#8792A3" opacity="0.55" font-family="Segoe UI, Arial, sans-serif" font-size="16">Study planner agent on port</text>
-  <rect x="818" y="458" width="46" height="20" rx="4" fill="#15222C" opacity="0.75"/>
-  <text x="824" y="474" fill="#3B9F6E" opacity="0.72" font-family="Consolas, monospace" font-size="14">10007</text>
+  <text x="648" y="294" fill="#F6F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800">Output</text>
+  <rect x="648" y="312" width="736" height="44" rx="6" fill="#14375A"/>
+  <text x="660" y="340" fill="#38A4FF" font-family="Segoe UI, Arial, sans-serif" font-size="16">Adjust the request and generate a plan when the backend is online.</text>
 
-  <circle cx="652" cy="494" r="3" fill="#8792A3" opacity="0.55"/>
-  <text x="668" y="500" fill="#8792A3" opacity="0.55" font-family="Segoe UI, Arial, sans-serif" font-size="16">Outline agent on port</text>
-  <rect x="794" y="482" width="46" height="20" rx="4" fill="#15222C" opacity="0.75"/>
-  <text x="800" y="498" fill="#3B9F6E" opacity="0.72" font-family="Consolas, monospace" font-size="14">10008</text>
+  <text x="648" y="392" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">The expected local services are:</text>
+  <circle cx="652" cy="430" r="3" fill="#F4F7FF"/>
+  <text x="668" y="436" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="16">Study planner agent on port</text>
+  <rect x="858" y="418" width="46" height="20" rx="4" fill="#17252F"/>
+  <text x="864" y="434" fill="#4BD186" font-family="Consolas, monospace" font-size="14">10007</text>
 
-  <circle cx="652" cy="518" r="3" fill="#8792A3" opacity="0.55"/>
-  <text x="668" y="524" fill="#8792A3" opacity="0.55" font-family="Segoe UI, Arial, sans-serif" font-size="16">Routing agent on port</text>
-  <rect x="804" y="506" width="46" height="20" rx="4" fill="#15222C" opacity="0.75"/>
-  <text x="810" y="522" fill="#3B9F6E" opacity="0.72" font-family="Consolas, monospace" font-size="14">10009</text>
+  <circle cx="652" cy="460" r="3" fill="#F4F7FF"/>
+  <text x="668" y="466" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="16">Outline agent on port</text>
+  <rect x="820" y="448" width="46" height="20" rx="4" fill="#17252F"/>
+  <text x="826" y="464" fill="#4BD186" font-family="Consolas, monospace" font-size="14">10008</text>
 
-  <circle cx="652" cy="542" r="3" fill="#8792A3" opacity="0.55"/>
-  <text x="668" y="548" fill="#8792A3" opacity="0.55" font-family="Segoe UI, Arial, sans-serif" font-size="16">Streamlit UI on port</text>
-  <rect x="798" y="530" width="38" height="20" rx="4" fill="#15222C" opacity="0.75"/>
-  <text x="804" y="546" fill="#3B9F6E" opacity="0.72" font-family="Consolas, monospace" font-size="14">8501</text>
+  <circle cx="652" cy="490" r="3" fill="#F4F7FF"/>
+  <text x="668" y="496" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="16">Routing agent on port</text>
+  <rect x="830" y="478" width="46" height="20" rx="4" fill="#17252F"/>
+  <text x="836" y="494" fill="#4BD186" font-family="Consolas, monospace" font-size="14">10009</text>
 
-  <rect x="0" y="718" width="1440" height="42" fill="#171D27"/>
-  <rect x="456" y="724" width="188" height="28" rx="14" fill="#303957"/>
-  <text x="494" y="744" fill="#D8DEEA" font-family="Segoe UI, Arial, sans-serif" font-size="14">Search</text>
+  <circle cx="652" cy="520" r="3" fill="#F4F7FF"/>
+  <text x="668" y="526" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="16">Streamlit UI on port</text>
+  <rect x="816" y="508" width="38" height="20" rx="4" fill="#17252F"/>
+  <text x="822" y="524" fill="#4BD186" font-family="Consolas, monospace" font-size="14">8501</text>
 </svg>

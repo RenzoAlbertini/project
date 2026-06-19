@@ -118,7 +118,8 @@ In today’s world, financial literacy can directly impact your quality of life 
 - Exposes a direct `/message` endpoint for the Streamlit UI.
 - Includes A2A-compatible title/study, outline, and routing agents.
 - Provides health checks for each local backend service.
-
+- Includes a download feature so users can save generated study plans for offline access and later review.
+  
 ## Architecture
 
 ```mermaid

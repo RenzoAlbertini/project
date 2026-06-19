@@ -10,11 +10,113 @@ This repository includes the application code, architecture notes, setup instruc
 
 UI preview:
 
-![AI Study Path Planner UI](docs/images/1.png)
+![AI Study Path Planner UI](docs/images/2.png)
 
 Generated output preview:
 
-![AI Study Path Planner generated output](docs/images/js-output-demo.svg)
+## Output
+
+### Study plan generated
+
+# Intermediate Personal Finance Management & Conscious Investing Study Plan
+
+**Duration:** 5 Weeks
+
+---
+
+## Introduction
+
+Personal finance management and conscious investing are essential skills for achieving financial stability and building long-term wealth. Understanding how to budget effectively, save consistently, and make informed investment decisions allows you to take control of your financial future.
+
+In today’s world, financial literacy plays a crucial role in improving life quality and expanding opportunities. Developing these skills is a fundamental step toward financial independence and smarter long-term decision-making.
+
+---
+
+## Week 1: Foundations of Personal Finance
+**Goal:** Understand core concepts of personal finance and begin tracking your money.
+
+### Topics Covered
+- What is personal finance?
+- Importance of financial literacy (National Endowment for Financial Education)
+- Income vs expenses
+- Creating and maintaining a simple budget
+
+### Activities
+- Read: “Personal Finance Basics” (Investopedia)
+- Watch: Budgeting 101 (Khan Academy)
+- Exercise: Track all expenses for one week using a spreadsheet or budgeting app
+
+---
+
+## Week 2: Saving Strategies & Emergency Funds
+**Goal:** Learn effective saving techniques and understand emergency funds.
+
+### Topics Covered
+- Importance of saving: short-term vs long-term goals
+- Saving strategies (automatic transfers, percentage-based saving)
+- Building an emergency fund (Consumer Financial Protection Bureau)
+- Basics of banking (interest rates, account types)
+
+### Activities
+- Read: “Saving Money: Strategies” (NerdWallet)
+- Set up an automatic savings plan or increase your savings rate
+- Calculate your emergency fund target based on monthly expenses
+
+---
+
+## Week 3: Conscious Spending and Debt Management
+**Goal:** Learn to manage spending habits and handle debt responsibly.
+
+### Topics Covered
+- Needs vs wants analysis (Federal Trade Commission)
+- Reducing unnecessary expenses
+- Types of debt (credit cards, loans, mortgages)
+- Debt repayment strategies (snowball vs avalanche method)
+
+### Activities
+- Read: “How To Manage Debt” (MoneyHelper UK)
+- Create a needs vs wants breakdown of your expenses
+- Choose and apply a debt repayment strategy
+
+---
+
+## Week 4: Introduction to Conscious Investing
+**Goal:** Understand basic investment instruments and responsible investing principles.
+
+### Topics Covered
+- What is investing? Stocks, bonds, ETFs
+- Risk tolerance and time horizon (SEC Investor.gov)
+- ESG investing (Environmental, Social, Governance) (Morningstar)
+- How to start investing safely
+
+### Activities
+- Read: “Investing 101: A Beginner’s Guide” (Robinhood Learn)
+- Research 2–3 ESG funds and analyze one in detail
+- Assess your personal risk tolerance via online questionnaires
+
+---
+
+## Week 5: Building a Long-Term Plan
+**Goal:** Combine all concepts into a personal financial roadmap.
+
+### Topics Covered
+- Setting financial and investment goals
+- Building a diversified portfolio
+- Reviewing and adjusting budget, savings, and investments
+- Tracking long-term progress
+
+### Activities
+- Read: “How To Build a Long-Term Portfolio” (Fidelity Investments)
+- Draft your personal financial plan (budget, savings, investments)
+- Share and review your plan with a mentor or peer
+
+---
+
+## Final Notes
+
+Stay consistent and review your progress weekly. Financial literacy is a long-term skill that develops over time.
+
+Completing this 5-week journey will give you practical tools to manage money more effectively and make more conscious investment decisions.
 
 More generated examples are available in [docs/demo-output.md](docs/demo-output.md).
 

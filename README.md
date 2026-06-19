@@ -2,23 +2,21 @@
 
 An AI-powered study planning app built with **Azure AI Foundry**, **A2A agent communication**, **FastAPI/Starlette**, and **Streamlit**.
 
-The app turns a learning goal into a structured study path with milestones, exercises, checkpoints, and a final mini project. It includes a local Streamlit interface, a direct Study Planner agent endpoint, and a routing agent that can communicate with remote A2A agents.
+The app turns a learning goal into a structured study path with milestones, exercises, checkpoints, and a final mini project. It includes a Streamlit interface, a direct Study Planner endpoint, and a routing agent that can communicate with remote A2A agents.
 
 ## Demo
 
-GitHub can show the source code, screenshots, architecture, setup instructions, and sample outputs. The interactive Streamlit UI cannot run directly inside a normal GitHub repository because it needs a Python server, Azure authentication, and local backend agents.
+This repository includes the application code, architecture notes, setup instructions, UI previews, and real sample outputs. The Streamlit app itself runs as a Python service, so GitHub can show the project but cannot host the live interactive backend directly from the README.
 
-To make the UI clickable from a GitHub README or LinkedIn post, deploy it to one of these:
-
-- **Streamlit Community Cloud** for a simple public demo.
-- **Azure App Service** or **Azure Container Apps** for a more professional Azure-hosted deployment.
-- **GitHub README + screenshots** for a portfolio-friendly static presentation.
-
-The repository includes a static preview of the UI so visitors can understand the experience directly from GitHub:
+UI preview:
 
 ![AI Study Path Planner UI](docs/images/ui-demo.svg)
 
-Sample generated outputs are available in [docs/demo-output.md](docs/demo-output.md).
+Generated output preview:
+
+![AI Study Path Planner generated output](docs/images/js-output-demo.svg)
+
+More generated examples are available in [docs/demo-output.md](docs/demo-output.md).
 
 ## Features
 
@@ -153,13 +151,37 @@ Invoke-WebRequest `
 
 ## Deployment
 
-Since this architecture relies on Azure AI Foundry endpoints, Azure Identity, and local microservices (A2A architecture), hosting a live demo requires secure credential management. Here are the recommended paths for moving this project to production:
+The current version is designed to run locally with Azure credentials and local backend services. For a public demo, the main decision is where to run the Python services and how to handle Azure authentication securely.
 
-### Option 1: Static Showcase (GitHub Portfolio)
-The repository includes a static preview of the interactive Streamlit UI under `docs/images/` and sample outputs in `docs/demo-output.md`. This allows visitors to review the generation capabilities directly from GitHub without needing a local environment or Azure session.
+### Static GitHub Showcase
 
-### Option 2: Streamlit Community Cloud
-For a quick web-based demo, the Streamlit interface can be deployed publicly. However, Azure credentials must be securely mapped via Streamlit Secrets, and the backend services must be reachable via public endpoints.
+The repository includes UI previews under `docs/images/` and sample generations in [docs/demo-output.md](docs/demo-output.md). This is the simplest way to show the project on GitHub and LinkedIn without exposing Azure credentials or maintaining a public server.
 
-### Option 3: Azure App Service / Container Apps
-The enterprise-grade solution. Containerizing the Streamlit UI and the FastAPI backend services using Docker, deploying them to Azure Container Apps, and configuring Managed Identities (MSI) to safely communicate with Azure AI Foundry without hardcoded keys.
+This option is not interactive, but it clearly shows the interface, the architecture, and the kind of output the agent produces.
+
+### Streamlit Community Cloud
+
+Streamlit Community Cloud can host the UI, but the Azure settings must be moved to Streamlit Secrets and the backend endpoints need to be reachable from the public app. For this project, that likely means either deploying the API services separately or simplifying the demo into a single hosted Streamlit application.
+
+### Azure App Service or Azure Container Apps
+
+For a more complete deployment, the Streamlit UI and backend services can be packaged and hosted on Azure. Managed Identity is the preferred approach for connecting to Azure AI Foundry without hardcoded keys. This would provide a public URL that can be linked from GitHub or LinkedIn.
+
+## Example Use Cases
+
+- Generate a 4-week plan for learning Azure AI agents.
+- Create an intermediate machine learning study roadmap.
+- Produce milestones, exercises, checkpoints, and project ideas for a technical topic.
+
+## Built With
+
+- Python
+- Streamlit
+- FastAPI / Starlette
+- Azure AI Foundry
+- Azure Identity
+- A2A protocol
+
+## Project Note
+
+Built by **Renzo Albertini** as a personal learning and portfolio project. AI assistance was used as a development companion for debugging, UI refinement, and documentation review.

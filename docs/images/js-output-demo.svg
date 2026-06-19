@@ -1,0 +1,60 @@
+<svg width="1440" height="760" viewBox="0 0 1440 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="760" fill="#071827"/>
+  <text x="48" y="62" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="800">Learning JavaScript: 7-Day Study Plan</text>
+  <text x="48" y="116" fill="#D8E1F0" font-family="Segoe UI, Arial, sans-serif" font-size="20">JavaScript is the backbone of interactive web development. It powers dynamic websites, makes user interfaces responsive,</text>
+  <text x="48" y="148" fill="#D8E1F0" font-family="Segoe UI, Arial, sans-serif" font-size="20">and is a fundamental language for aspiring developers. This plan breaks the basics into focused daily practice.</text>
+
+  <rect x="48" y="194" width="1344" height="438" fill="#0B1928" stroke="#243348"/>
+  <line x1="48" y1="248" x2="1392" y2="248" stroke="#243348"/>
+  <line x1="48" y1="302" x2="1392" y2="302" stroke="#243348"/>
+  <line x1="48" y1="356" x2="1392" y2="356" stroke="#243348"/>
+  <line x1="48" y1="410" x2="1392" y2="410" stroke="#243348"/>
+  <line x1="48" y1="464" x2="1392" y2="464" stroke="#243348"/>
+  <line x1="48" y1="518" x2="1392" y2="518" stroke="#243348"/>
+  <line x1="48" y1="572" x2="1392" y2="572" stroke="#243348"/>
+  <line x1="118" y1="194" x2="118" y2="632" stroke="#243348"/>
+  <line x1="300" y1="194" x2="300" y2="632" stroke="#243348"/>
+  <line x1="792" y1="194" x2="792" y2="632" stroke="#243348"/>
+
+  <text x="66" y="229" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">Day</text>
+  <text x="136" y="229" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">Main Topic</text>
+  <text x="318" y="229" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">Key Concept to Understand</text>
+  <text x="812" y="229" fill="#F4F7FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">Mini-Exercise / Quiz</text>
+
+  <text x="68" y="282" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">1</text>
+  <text x="136" y="282" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Introduction to JS</text>
+  <text x="318" y="282" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">What JavaScript is and how to run it</text>
+  <text x="812" y="282" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Write and run console.log("Hello, JavaScript!");</text>
+
+  <text x="68" y="336" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">2</text>
+  <text x="136" y="336" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Variables &amp; Data</text>
+  <text x="318" y="336" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Declaring variables with let / const and data types</text>
+  <text x="812" y="336" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Declare your name and age, then log both.</text>
+
+  <text x="68" y="390" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">3</text>
+  <text x="136" y="390" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Operators &amp; Logic</text>
+  <text x="318" y="390" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Basic math, comparison, and logical operators</text>
+  <text x="812" y="390" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Check if a number is both positive and even.</text>
+
+  <text x="68" y="444" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">4</text>
+  <text x="136" y="444" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Control Flow</text>
+  <text x="318" y="444" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">if, else if, and else statements</text>
+  <text x="812" y="444" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Print a greeting based on the current hour.</text>
+
+  <text x="68" y="498" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">5</text>
+  <text x="136" y="498" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Arrays &amp; Loops</text>
+  <text x="318" y="498" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Creating arrays and looping with for / while</text>
+  <text x="812" y="498" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Create an array of colors and print each one.</text>
+
+  <text x="68" y="552" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">6</text>
+  <text x="136" y="552" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Functions</text>
+  <text x="318" y="552" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Parameters, return values, and simple reusable logic</text>
+  <text x="812" y="552" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Write a function that returns the square of a number.</text>
+
+  <text x="68" y="606" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">7</text>
+  <text x="136" y="606" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Objects &amp; Review</text>
+  <text x="318" y="606" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Objects with properties; recap everything learned</text>
+  <text x="812" y="606" fill="#DCE4F2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Create a book object and log its title and author.</text>
+
+  <text x="48" y="694" fill="#D8E1F0" font-family="Segoe UI, Arial, sans-serif" font-size="20">Stay consistent, try the exercises, and revisit tough concepts. By the end of 7 days, you will have a solid JavaScript foundation.</text>
+</svg>

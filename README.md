@@ -14,7 +14,7 @@ UI preview:
 
 Generated output preview:
 
-## Output
+**Prompt**
 
 ### Study plan generated
 
@@ -117,6 +117,8 @@ In today’s world, financial literacy can directly impact your quality of life 
 Stay consistent and review your progress weekly. Financial literacy is a long-term skill that builds over time.
 
 This 5-week path will give you practical tools to manage money effectively and make more conscious investment decisions.
+
+**Prompt**
 
 ## Features
 

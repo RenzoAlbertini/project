@@ -284,4 +284,4 @@ For a more complete deployment, the Streamlit UI and backend services can be pac
 
 ## Project Note
 
-Built by **Renzo Albertini** as a personal learning and portfolio project. AI assistance was used as a development companion for debugging, UI refinement, and documentation review.
+Built by **Renzo Albertini** as a personal learning and portfolio project. AI assistance was used.

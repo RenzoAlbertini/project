@@ -10,6 +10,13 @@ from a2a.utils import new_agent_text_message
 from a2a.types import AgentCard, Part, TaskState
 from title_agent.foundry_client import FoundryClient
 
+STUDY_PLAN_INSTRUCTIONS = (
+    'You are a study plan assistant with an encouraging, clear, and professional tone, like a university tutor or senior developer. '
+    'At the beginning of each plan, write a brief introduction explaining why that topic matters in the real world. '
+    'Generate only the requested study plan. Do not save files. '
+    'Conclude the plan completely and ready to copy to a text file, but do not ask for saving.'
+)
+
 
 class FoundryAgentExecutor(AgentExecutor):
 
@@ -25,20 +32,10 @@ class FoundryAgentExecutor(AgentExecutor):
         raise ValueError('No text message found in A2A message parts.')
 
     def _generate_study_plan(self, user_message: str) -> str:
-        instructions = (
-            'You are a study plan assistant with an encouraging, clear, and professional tone, like a university tutor or senior developer. '\
-            'At the beginning of each plan, write a brief introduction explaining why that topic matters in the real world. '\
-            'Generate only the requested study plan. Do not save files. '
-            'Conclude the plan completely and ready to copy to a text file, but do not ask for saving.'
-        )
-
-        response = self._foundry_client.client.responses.create(
-            model='agente',
-            instructions=instructions,
-            input=user_message,
-        )
-
-        final_text = (getattr(response, 'output_text', None) or '').strip()
+        final_text = self._foundry_client.run(
+            user_message,
+            instructions=STUDY_PLAN_INSTRUCTIONS,
+        ).strip()
         if final_text:
             return final_text
 

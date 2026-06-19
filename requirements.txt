@@ -9,3 +9,5 @@ fastapi
 azure-ai-projects 
 azure-ai-agents 
 a2a-sdk==0.3.26
+requests
+streamlit

@@ -8,10 +8,11 @@ from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 from dotenv import load_dotenv
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import PlainTextResponse
+from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Route
 
-from title_agent.agent_executor import create_foundry_agent_executor
+from title_agent.agent_executor import STUDY_PLAN_INSTRUCTIONS, create_foundry_agent_executor
+from title_agent.foundry_client import FoundryClient
 
 load_dotenv()
 
@@ -68,14 +69,43 @@ a2a_app = A2AStarletteApplication(
 )
 
 routes = a2a_app.routes()
+direct_foundry_client: FoundryClient | None = None
 
 # Health check endpoint
 async def health_check(request: Request) -> PlainTextResponse:
     """Health check endpoint for service monitoring."""
     return PlainTextResponse('Study Planner Agent is running!')
 
+
+async def handle_message(request: Request) -> JSONResponse:
+    """Simple JSON endpoint used by the local Streamlit demo UI."""
+    global direct_foundry_client
+
+    data = await request.json()
+    user_message = (data.get("message") or "").strip()
+    if not user_message:
+        return JSONResponse({"error": "No message provided."}, status_code=400)
+
+    try:
+        if direct_foundry_client is None:
+            direct_foundry_client = FoundryClient()
+
+        response = direct_foundry_client.run(
+            user_message,
+            instructions=STUDY_PLAN_INSTRUCTIONS,
+        )
+        return JSONResponse({"response": response or "No response from agent."})
+    except Exception as exc:
+        return JSONResponse(
+            {"error": f"Study Planner failed to process the request: {exc}"},
+            status_code=500,
+        )
+
 routes.append(
     Route(path='/health', methods=['GET'], endpoint=health_check)
+)
+routes.append(
+    Route(path='/message', methods=['POST'], endpoint=handle_message)
 )
 
 # Initialize Starlette application

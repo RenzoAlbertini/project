@@ -1,231 +1,187 @@
-# Azure AI Study Planner Agent
+# AI Study Path Planner
 
-<div align="center">
+An AI-powered study planning app built with **Azure AI Foundry**, **A2A agent communication**, **FastAPI/Starlette**, and **Streamlit**.
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org)
-[![Azure Foundry](https://img.shields.io/badge/Azure-Foundry-0078D4?logo=microsoft-azure)](https://azure.microsoft.com/en-us/services/ai-foundry/)
-[![A2A Protocol](https://img.shields.io/badge/A2A-Protocol-FF6B35?logo=microsoft-azure)](https://github.com/microsoft/a2a)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+The app turns a learning goal into a structured study path with milestones, exercises, checkpoints, and a final mini project. It includes a local Streamlit interface, a direct Study Planner agent endpoint, and a routing agent that can communicate with remote A2A agents.
 
-**An intelligent study plan generator powered by Microsoft Azure Foundry and the A2A protocol**
+## Demo
 
-[Features](#features) • [Setup](#setup) • [Usage](#usage) • [Architecture](#architecture)
+GitHub can show the source code, screenshots, architecture, setup instructions, and sample outputs. The interactive Streamlit UI cannot run directly inside a normal GitHub repository because it needs a Python server, Azure authentication, and local backend agents.
 
-</div>
+To make the UI clickable from a GitHub README or LinkedIn post, deploy it to one of these:
 
----
+- **Streamlit Community Cloud** for a simple public demo.
+- **Azure App Service** or **Azure Container Apps** for a more professional Azure-hosted deployment.
+- **GitHub README + screenshots** for a portfolio-friendly static presentation.
 
-## Overview
+The repository includes a static preview of the UI so visitors can understand the experience directly from GitHub:
 
-This project demonstrates a production-ready AI agent that generates structured, personalized study plans using **Microsoft Azure Foundry** and the **A2A (Agent-to-Agent) communication protocol**. The agent provides educational guidance with real-world context and professional tone suitable for university learners and career-focused professionals.
+![AI Study Path Planner UI](docs/images/ui-demo.svg)
+
+Sample generated outputs are available in [docs/demo-output.md](docs/demo-output.md).
 
 ## Features
 
-- ✅ **Structured Study Plans** - Generates multi-phase learning paths with progression from basics to advanced topics
-- ✅ **Real-World Context** - Explains why each topic matters in professional environments
-- ✅ **A2A Protocol Support** - Full remote agent communication via the A2A protocol
-- ✅ **Azure Foundry Integration** - Leverages Foundry's gpt-4.1 model with managed inference
-- ✅ **Professional Tone** - Outputs crafted to feel like guidance from experienced mentors
-- ✅ **Health Monitoring** - Built-in health check endpoint for observability
-- ✅ **Async-First** - Non-blocking request handling with full async/await support
+- Generates structured study plans from a natural-language learning goal.
+- Supports difficulty and duration customization from the UI.
+- Adds weekly milestones, exercises, checkpoints, and self-assessment questions.
+- Uses Azure AI Foundry with Azure Identity authentication.
+- Exposes a direct `/message` endpoint for the Streamlit UI.
+- Includes A2A-compatible title/study, outline, and routing agents.
+- Provides health checks for each local backend service.
 
 ## Architecture
 
 ```mermaid
 graph TD
-    A["A2A Client"] -->|HTTP POST| B["A2AStarletteApplication"]
-    B -->|Route & Deserialize| C["FoundryAgentExecutor"]
-    C -->|Extract User Query| D["_extract_user_message"]
-    C -->|Generate Plan| E["_generate_study_plan"]
-    E -->|Call Foundry| F["FoundryClient<br/>AzureOpenAI"]
-    F -->|Bearer Token| G["Azure Identity<br/>DefaultAzureCredential"]
-    F -->|Responses API| H["Foundry Endpoint<br/>gpt-4.1"]
-    H -->|Study Plan| F
-    F -->|output_text| E
-    E -->|Complete Task| C
-    C -->|Return Response| B
-    B -->|A2A Message| A
+    UI["Streamlit UI"] -->|POST /message| Direct["Study Planner Agent"]
+    UI -->|Optional POST /message| Router["Routing Agent"]
+    Router -->|A2A| Study["Study Planner A2A Agent"]
+    Router -->|A2A| Outline["Outline A2A Agent"]
+    Direct --> Foundry["Azure AI Foundry Agent Endpoint"]
+    Study --> Foundry
+    Outline --> AzureAgents["Azure AI Agents Service"]
+    Foundry --> Model["gpt-4.1"]
+```
+
+## Project Structure
+
+```text
+python/
+|-- web_ui.py                  # Streamlit interface
+|-- run_all.py                 # Starts the local backend services and UI
+|-- client.py                  # CLI client for the routing agent
+|-- title_agent/
+|   |-- server.py              # Study Planner A2A server + direct /message endpoint
+|   |-- agent_executor.py      # A2A task execution logic
+|   |-- foundry_client.py      # Azure Foundry Responses API client
+|   `-- agent.py               # Azure AI Agents implementation
+|-- outline_agent/
+|   |-- server.py              # Outline A2A server
+|   |-- agent_executor.py      # Outline A2A execution logic
+|   `-- agent.py               # Azure AI Agents implementation
+|-- routing_agent/
+|   |-- server.py              # FastAPI routing endpoint
+|   `-- agent.py               # Routing agent and A2A client logic
+|-- requirements.txt
+`-- .env.example
 ```
 
 ## Setup
 
 ### Prerequisites
 
-- **Python 3.10+**
-- **Azure Subscription** with access to Azure AI Foundry
-- **Azure CLI** authenticated: `az login`
-- **Environment variables** configured (see `.env.example`)
+- Python 3.10+
+- Azure subscription with Azure AI Foundry access
+- Azure CLI authenticated with `az login`
+- A deployed Azure AI Foundry agent/model
 
-### Installation
+### Install
 
-1. **Clone or download** this repository:
-```bash
-cd 09-build-remote-agents-with-a2a/python
-```
-
-2. **Create virtual environment** (optional but recommended):
-```bash
+```powershell
+cd Labfiles\09-build-remote-agents-with-a2a\python
 python -m venv labenv
-.\labenv\Scripts\activate  # Windows
-# or
-source labenv/bin/activate  # macOS/Linux
-```
-
-3. **Install dependencies**:
-```bash
+.\labenv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-4. **Configure environment**:
-Create a `.env` file with:
+Create a `.env` file from `.env.example` and update the Azure values:
+
 ```env
-FOUNDRY_AGENT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project/agents/agente/endpoint/protocols/openai/responses
-FOUNDRY_API_VERSION=2024-10-21
 SERVER_URL=localhost
 TITLE_AGENT_PORT=10007
+OUTLINE_AGENT_PORT=10008
+ROUTING_AGENT_PORT=10009
+
+FOUNDRY_AGENT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project/agents/your-agent/endpoint/protocols/openai/responses
+FOUNDRY_API_VERSION=v1
+FOUNDRY_AGENT_MODEL=gpt-4.1
+PROJECT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project
+MODEL_DEPLOYMENT_NAME=gpt-4.1
 ```
 
-## Usage
+## Run Locally
 
-### Start the Agent Server
-
-```bash
-python -m title_agent.server
+```powershell
+cd Labfiles\09-build-remote-agents-with-a2a\python
+.\labenv\Scripts\Activate.ps1
+python run_all.py
 ```
 
-Server will start on `http://localhost:10007/`
+Open the UI:
 
-### Health Check
-
-```bash
-curl http://localhost:10007/health
-# Response: "Study Planner Agent is running!"
+```text
+http://localhost:8501
 ```
 
-### Request a Study Plan
+Expected local services:
 
-Using any A2A-compatible client or cURL:
+- Study Planner agent: `http://localhost:10007`
+- Outline agent: `http://localhost:10008`
+- Routing agent: `http://localhost:10009`
+- Streamlit UI: `http://localhost:8501`
 
-```bash
-curl -X POST http://localhost:10007/openai/responses \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "agente",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Create a study plan for learning Python data science from scratch"
-      }
-    ]
-  }'
+## API Test
+
+Health check:
+
+```powershell
+Invoke-WebRequest -UseBasicParsing http://localhost:10007/health
 ```
 
-### Example Response
+Generate a study plan:
 
-```
-Study Planner Agent is processing your request...
+```powershell
+$body = @{
+  message = "Create an intermediate study plan for Azure AI agents. Duration: 4 weeks."
+} | ConvertTo-Json
 
-# Python Data Science Learning Path
-
-## Why This Matters
-Data science is one of the most in-demand skills in tech. Companies across finance, 
-healthcare, and tech rely on professionals who can extract insights from data...
-
-## Phase 1: Python Fundamentals (Weeks 1-2)
-- Core syntax and data types
-- Functions, modules, and packages
-- Exception handling
-- [Projects]: Build a CLI calculator
-
-## Phase 2: Data Manipulation (Weeks 3-4)
-- NumPy arrays and operations
-- Pandas DataFrames and analysis
-...
+Invoke-WebRequest `
+  -UseBasicParsing `
+  -Uri "http://localhost:10007/message" `
+  -Method Post `
+  -Body $body `
+  -ContentType "application/json"
 ```
 
-## Project Structure
+## Security Notes
 
-```
-title_agent/
-├── server.py              # A2A HTTP server with Starlette
-├── agent_executor.py      # Core request processing and plan generation
-├── foundry_client.py      # Azure Foundry API client wrapper
-├── agent.py               # Legacy Azure AI Agents implementation (reference)
-└── __init__.py            # Package initialization
+- `.env` is intentionally ignored by Git.
+- Azure credentials are not stored in the repository.
+- The app uses Azure Identity and your authenticated Azure CLI/session.
+- For a public hosted demo, use managed identity or secret storage instead of local `az login`.
 
-requirements.txt           # Python dependencies
-.env                      # Environment configuration (not in repo)
-```
+## Deployment Options
 
-## Key Components
+### Option 1: Static GitHub Portfolio
 
-### `FoundryAgentExecutor`
-Implements the A2A `AgentExecutor` interface:
-- Handles incoming A2A requests
-- Extracts user queries from message parts
-- Calls Foundry with optimized instructions
-- Manages task lifecycle (submit → working → complete/failed)
+Best for a fast LinkedIn-ready showcase:
 
-### `FoundryClient`
-Wrapper around `AzureOpenAI` with:
-- Azure identity-based authentication (no hardcoded credentials)
-- Bearer token provider setup
-- Responses API client initialization
-- Clean separation of concerns
+- Commit the code.
+- Add screenshots under `docs/images/`.
+- Link this README and [docs/demo-output.md](docs/demo-output.md).
 
-### `server.py`
-Sets up:
-- Agent card for service discovery
-- Available skills definition
-- Health check endpoint
-- Starlette + Uvicorn HTTP server
-- A2A routing and task management
+This does not make the app interactive, but it presents the project professionally.
 
-## Performance Notes
+### Option 2: Streamlit Community Cloud
 
-- **First-request latency**: ~2-5 seconds (Foundry model loading)
-- **Subsequent requests**: ~1-2 seconds
-- **Typical response size**: 1.5-3KB (study plan)
-- **Token efficiency**: ~300-600 tokens per generated plan
+Good for a simple public web demo, but Azure authentication must be configured with secure secrets. The app also needs reachable backend services, so the architecture may need simplification to run as a single Streamlit process or be deployed together with the API.
 
-## Security
+### Option 3: Azure App Service or Azure Container Apps
 
-✅ **No hardcoded credentials** - Uses Azure Identity for authentication  
-✅ **No file persistence** - All operations are stateless and in-memory  
-✅ **Secure token handling** - Bearer tokens managed by Azure SDK  
-✅ **CORS-safe** - Designed for cross-origin A2A communication  
+Best production-style option. Package the Streamlit UI and API backend, configure Azure credentials securely, and expose a public URL that can be linked from GitHub and LinkedIn.
 
-## Troubleshooting
+## Example Use Cases
 
-| Issue | Solution |
-|-------|----------|
-| `401 Unauthorized` | Run `az login` and verify FOUNDRY_AGENT_ENDPOINT |
-| `Empty response` | Check Foundry agent is deployed; verify `agente` model exists |
-| `Port already in use` | Change `TITLE_AGENT_PORT` in `.env` |
-| `Connection timeout` | Ensure Foundry endpoint is accessible from your network |
+- Generate a 4-week plan for learning Azure AI agents.
+- Create an intermediate machine learning study roadmap.
+- Produce milestones, exercises, checkpoints, and project ideas for a technical topic.
 
-## Next Steps
+## Built With
 
-1. **Integrate with Teams** - Use this agent in Microsoft Teams workflows
-2. **Add Tool Calling** - Extend with OpenAPI tools for interactive learning
-3. **Multi-Agent Orchestration** - Combine with other agents (routing_agent, outline_agent)
-4. **Custom Knowledge Base** - Fine-tune Foundry with domain-specific study guides
-5. **Caching Layer** - Add Redis for frequently requested topics
-
-## Contributing
-
-This is a learning project for the Microsoft AI Agents course. Feedback and improvements are welcome!
-
-## License
-
-MIT License - See LICENSE file for details.
-
----
-
-<div align="center">
-
-**Built with ❤️ using Microsoft Azure Foundry and the A2A Protocol**
-
-[Microsoft Learn](https://learn.microsoft.com/en-us/azure/ai-services/agents/) • [Azure Foundry Docs](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/agents-overview) • [A2A GitHub](https://github.com/microsoft/a2a)
-
-</div>
+- Python
+- Streamlit
+- FastAPI / Starlette
+- Azure AI Foundry
+- Azure Identity
+- A2A protocol

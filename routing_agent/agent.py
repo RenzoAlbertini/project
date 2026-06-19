@@ -1,7 +1,6 @@
 import asyncio
 import json
 import os
-import time
 import uuid
 import httpx
 
@@ -168,7 +167,7 @@ class RoutingAgent:
 
         self.agents_client.messages.create(
             thread_id=self.current_thread.id,
-            role=MessageRole.User,
+            role=MessageRole.USER,
             content=user_message
         )
 
@@ -178,7 +177,7 @@ class RoutingAgent:
         )
 
         while run.status in ["queued", "in_progress", "requires_action"]:
-            time.sleep(1)
+            await asyncio.sleep(1)
             run = self.agents_client.runs.get(
                 thread_id=self.current_thread.id,
                 run_id=run.id
@@ -231,21 +230,3 @@ class RoutingAgent:
 
         return "No response"
 
-
-def _get_initialized_routing_agent_sync():
-
-    async def _async_main():
-        agent = await RoutingAgent.create(
-            remote_agent_addresses=[
-                f"http://{os.environ['SERVER_URL']}:{os.environ['TITLE_AGENT_PORT']}",
-                f"http://{os.environ['SERVER_URL']}:{os.environ['OUTLINE_AGENT_PORT']}",
-            ]
-        )
-
-        agent.create_agent()
-        return agent
-
-    return asyncio.run(_async_main())
-
-
-routing_agent = _get_initialized_routing_agent_sync()

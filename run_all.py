@@ -1,4 +1,4 @@
-""" Runs each agent server and starts the client """
+"""Run each agent server and start the Streamlit demo UI."""
 
 import asyncio
 import subprocess
@@ -11,6 +11,10 @@ import threading
 from dotenv import load_dotenv
 
 load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOCAL_PYTHON = os.path.join(BASE_DIR, "labenv", "Scripts", "python.exe")
+PYTHON_EXE = LOCAL_PYTHON if os.path.exists(LOCAL_PYTHON) else sys.executable
 
 server_url = os.environ["SERVER_URL"]
 servers = [
@@ -41,12 +45,12 @@ async def wait_for_server_ready(server, timeout=30):
                 health_url = f"http://{server_url}:{server['port']}/health"
                 r = await client.get(health_url, timeout=2)
                 if r.status_code == 200:
-                    print(f"✅ {server['name']} is healthy and ready!")
+                    print(f"[OK] {server['name']} is healthy and ready!")
                     return True
             except Exception:
                 pass
             if time.time() - start > timeout:
-                print(f"❌ Timeout waiting for server health at {health_url}")
+                print(f"[ERROR] Timeout waiting for server health at {health_url}")
                 return False
             await asyncio.sleep(1)
 
@@ -58,15 +62,42 @@ def stream_subprocess_output(process):
         print(line.rstrip())
 
 
-async def run_client_main():
-    from client import main as client_main
-    await client_main()
+def run_web_ui():
+    ui_cmd = [
+        PYTHON_EXE,
+        "-m",
+        "streamlit",
+        "run",
+        "web_ui.py",
+        "--server.address",
+        server_url,
+        "--server.port",
+        "8501",
+        "--server.headless",
+        "true",
+    ]
+
+    print("[UI] Starting Streamlit UI on port 8501")
+    process = subprocess.Popen(
+        ui_cmd,
+        env=os.environ.copy(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        universal_newlines=True,
+    )
+    server_procs.append(process)
+
+    thread = threading.Thread(target=stream_subprocess_output, args=(process,), daemon=True)
+    thread.start()
+
+    return process
 
 async def main():
-    print("🚀 Starting server subprocesses...")
+    print("[START] Starting server subprocesses...")
     for server in servers:
         cmd = [
-            sys.executable,
+            PYTHON_EXE,
             "-m",
             "uvicorn",
             server["module"],
@@ -78,7 +109,7 @@ async def main():
             "info"
         ]
         
-        print(f"🚀 Starting {server['name']} on port {server['port']}")
+        print(f"[START] Starting {server['name']} on port {server['port']}")
         process = subprocess.Popen(
             cmd,
             env=os.environ.copy(),
@@ -94,16 +125,18 @@ async def main():
 
         ready = await wait_for_server_ready(server)
         if not ready:
-            print(f"❌ Server '{server['name']}' failed to start, killing process...")
+            print(f"[ERROR] Server '{server['name']}' failed to start, killing process...")
             process.kill()
             sys.exit(1)
 
     try:
-        await run_client_main()
+        ui_process = run_web_ui()
+        print(f"[OK] UI ready at http://{server_url}:8501")
+        ui_process.wait()
     except Exception as e:
-        print(f"❌ Client stopped: {e}")
+        print(f"[ERROR] UI stopped: {e}")
     finally:
-        print("🛑 Stopping server subprocess...")
+        print("[STOP] Stopping subprocesses...")
         # Terminate the server subprocess gracefully
         for process in server_procs:
             if process.poll() is None:  # Still running

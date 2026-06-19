@@ -12,7 +12,8 @@ UI preview:
 
 ![AI Study Path Planner UI](docs/images/2.png)
 
-<pre><code>
+Generated output preview:
+
 ### Study plan generated
 
 # Intermediate Personal Finance Management & Conscious Investing Study Plan
@@ -106,15 +107,6 @@ In today’s world, financial literacy can directly impact your quality of life 
 - Read: How to Build a Long-Term Portfolio (Fidelity Investments → https://www.fidelity.com)
 - Draft a personal financial plan
 - Review with mentor or peer
-</code></pre>
----
-
-## Final Notes
-
-Stay consistent and review your progress weekly. Financial literacy is a long-term skill that builds over time.
-
-This 5-week path will give you practical tools to manage money effectively and make more conscious investment decisions.
-## Output example
 
 
 ## Features

@@ -27,20 +27,44 @@ The app exposes one main chat interface. Users can ask naturally for explanation
 
 ## Architecture
 
+The project is organized as a unified multi-agent assistant. The user interacts with one Streamlit chat, while the backend routes the request to the right capability and then composes the partial results into one final answer.
+
 ```mermaid
 graph TD
-    UI["ui/app.py Streamlit Chat"] --> Router["core/router.py"]
-    Router --> Planner["Study Planner Prompt"]
-    Router --> Exam["Exam Simulator Prompt"]
-    Router --> Tutor["Tutor/Explanation Prompt"]
-    Router --> Career["Career Advisor Prompt"]
-    Router --> Web["tools/web_search.py"]
-    UI --> Direct["University Assistant /message"]
-    UI --> OptionalRouter["Routing Agent /message"]
-    Direct --> Foundry["Azure Foundry Responses API"]
-    Web --> FoundryWeb["Azure Foundry Web Search Tool"]
-    OptionalRouter --> A2A["A2A Remote Agents"]
+    UI["UI: Streamlit single chat<br/>ui/app.py"] --> Gateway["API Gateway<br/>single /message endpoint"]
+    Gateway --> Router["Intent Router<br/>core/router.py"]
+
+    Router --> Tutor["Tutor / Explanation<br/>Azure Foundry prompt"]
+    Router --> Exam["Exam Simulator<br/>question + evaluation flow"]
+    Router --> Planner["Study Planner<br/>weekly learning plan"]
+    Router --> Career["Career Advisor<br/>skills + projects + roadmap"]
+    Router --> Web["Web Search Tool<br/>tools/web_search.py"]
+
+    Tutor --> Composer["Response Composer<br/>core/response_composer.py"]
+    Exam --> Composer
+    Planner --> Composer
+    Career --> Composer
+    Web --> Composer
+
+    Composer --> Final["Final Unified Answer<br/>Explanation + Exam Question + Study Plan"]
+    Final --> UI
+
+    Gateway -. compatible with .-> A2A["A2A Remote Agents"]
+    Tutor -. calls .-> Foundry["Azure Foundry Responses API"]
+    Exam -. calls .-> Foundry
+    Planner -. calls .-> Foundry
+    Career -. calls .-> Foundry
+    Web -. calls .-> FoundryWeb["Azure Foundry Web Search Tool"]
 ```
+
+### Runtime Flow
+
+1. The student writes a natural message in the Streamlit chat.
+2. The UI sends the message to one backend endpoint.
+3. The router detects one or more intents, such as explanation, exam, study planning, career guidance, or web search.
+4. The selected agents/tools run in a controlled sequence.
+5. The response composer merges all outputs into one structured answer instead of returning disconnected blocks.
+6. The final answer is rendered back in the same chat.
 
 ## Project Structure
 
@@ -56,6 +80,7 @@ python/
 |   `-- routing_agent/         # Foundry routing agent + A2A client
 |-- core/
 |   |-- router.py              # Multi-intent routing logic
+|   |-- response_composer.py   # Merges agent/tool results into one answer
 |   |-- prompts.py             # Prompt builders
 |   `-- memory.py              # Lightweight local JSON memory
 |-- tools/
@@ -67,7 +92,7 @@ python/
 |   |-- settings.py            # Shared paths and env helpers
 |   `-- .env.example           # Example local configuration
 `-- docs/
-    `-- images/
+    `-- immages/               # UI screenshots used by the README
 ```
 
 ## Prerequisites

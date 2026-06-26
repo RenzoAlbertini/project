@@ -22,6 +22,7 @@ from core.prompts import (
     build_study_plan_prompt,
     build_tutor_prompt,
 )
+from core.response_composer import compose_unified_response
 from core.router import RouteDecision, route_user_inputs
 from tools.web_search import search_web_with_foundry
 
@@ -144,41 +145,10 @@ def _run_decisions_as_structured_response(
     message: str,
     endpoint: str,
 ) -> str:
-    explanation_parts: list[str] = []
-    exam_part = ""
-    study_part = ""
-
-    for decision in _ordered_decisions(decisions):
-        result = _run_decision(decision, message, endpoint)
-        if decision.mode in {"tutor", "career_advisor", "web_search"}:
-            explanation_parts.append(result)
-        elif decision.mode in {"exam_start", "exam_answer", "exam_next"}:
-            exam_part = result
-        elif decision.mode == "study_planner":
-            study_part = result
-
-    sections: list[str] = []
-    if explanation_parts:
-        sections.append("### Explanation\n\n" + "\n\n".join(explanation_parts).strip())
-    if exam_part:
-        sections.append("### Exam Question\n\n" + exam_part.strip())
-    if study_part:
-        sections.append("### Study Plan\n\n" + study_part.strip())
-
-    return "\n\n".join(sections)
-
-
-def _ordered_decisions(decisions: list[RouteDecision]) -> list[RouteDecision]:
-    priority = {
-        "tutor": 0,
-        "career_advisor": 0,
-        "web_search": 0,
-        "exam_start": 1,
-        "exam_answer": 1,
-        "exam_next": 1,
-        "study_planner": 2,
-    }
-    return sorted(decisions, key=lambda decision: priority.get(decision.mode, 0))
+    return compose_unified_response(
+        decisions,
+        lambda decision: _run_decision(decision, message, endpoint),
+    )
 
 
 def _run_decision(decision: RouteDecision, message: str, endpoint: str) -> str:

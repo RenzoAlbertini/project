@@ -1,5 +1,7 @@
 # AI Personal University Assistant
 
+![AI Personal University Assistant UI](docs/immages/Screenshot%202026-06-27%20013057.png)
+
 A unified AI assistant for students, built with Python, Streamlit, Azure AI Foundry, and A2A-compatible agent services.
 
 The app exposes one main chat interface. Users can ask naturally for explanations, exam practice, study planning, web research with sources, or career guidance. The UI detects all relevant intents, executes them in sequence, and merges the result into one structured response.

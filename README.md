@@ -27,44 +27,76 @@ The app exposes one main chat interface. Users can ask naturally for explanation
 
 ## Architecture
 
-The project is organized as a unified multi-agent assistant. The user interacts with one Streamlit chat, while the backend routes the request to the right capability and then composes the partial results into one final answer.
+The project follows a clean multi-agent assistant architecture. The user only sees one chat, while the backend detects the intent, runs the right capabilities, and merges everything into one final answer.
 
 ```mermaid
-graph TD
-    UI["UI: Streamlit single chat<br/>ui/app.py"] --> Gateway["API Gateway<br/>single /message endpoint"]
-    Gateway --> Router["Intent Router<br/>core/router.py"]
+flowchart TD
+    User["Student"] --> UI["Streamlit UI<br/>ui/app.py"]
+    UI --> API["Backend API<br/>single /message endpoint"]
+    API --> Router["Intent Router<br/>core/router.py"]
 
-    Router --> Tutor["Tutor / Explanation<br/>Azure Foundry prompt"]
-    Router --> Exam["Exam Simulator<br/>question + evaluation flow"]
-    Router --> Planner["Study Planner<br/>weekly learning plan"]
-    Router --> Career["Career Advisor<br/>skills + projects + roadmap"]
-    Router --> Web["Web Search Tool<br/>tools/web_search.py"]
+    subgraph Capabilities["Agent and Tool Layer"]
+        Tutor["Tutor Agent<br/>explanations"]
+        Exam["Exam Simulator<br/>questions + evaluation"]
+        Planner["Study Planner<br/>weekly plans"]
+        Career["Career Advisor<br/>skills + projects"]
+        Search["Web Search Tool<br/>sources + citations"]
+    end
+
+    Router --> Tutor
+    Router --> Exam
+    Router --> Planner
+    Router --> Career
+    Router --> Search
 
     Tutor --> Composer["Response Composer<br/>core/response_composer.py"]
     Exam --> Composer
     Planner --> Composer
     Career --> Composer
-    Web --> Composer
+    Search --> Composer
 
-    Composer --> Final["Final Unified Answer<br/>Explanation + Exam Question + Study Plan"]
-    Final --> UI
+    Composer --> Answer["Unified Answer<br/>Explanation + Exam Question + Study Plan"]
+    Answer --> UI
 
-    Gateway -. compatible with .-> A2A["A2A Remote Agents"]
-    Tutor -. calls .-> Foundry["Azure Foundry Responses API"]
-    Exam -. calls .-> Foundry
-    Planner -. calls .-> Foundry
-    Career -. calls .-> Foundry
-    Web -. calls .-> FoundryWeb["Azure Foundry Web Search Tool"]
+    subgraph Integrations["External Integrations"]
+        Foundry["Azure AI Foundry<br/>Responses API"]
+        FoundrySearch["Azure AI Foundry<br/>Web Search Tool"]
+        A2A["A2A-compatible<br/>remote agents"]
+    end
+
+    API -. compatible with .-> A2A
+    Tutor -. uses .-> Foundry
+    Exam -. uses .-> Foundry
+    Planner -. uses .-> Foundry
+    Career -. uses .-> Foundry
+    Search -. uses .-> FoundrySearch
 ```
+
+### Component Responsibilities
+
+| Layer | Responsibility |
+| --- | --- |
+| Streamlit UI | Provides one chat interface for every student request. |
+| Backend API | Keeps one entry point for the assistant and preserves A2A compatibility. |
+| Intent Router | Detects one or more intents from the same user message. |
+| Agent and Tool Layer | Runs the selected capability: tutoring, exam, planning, career advice, or web search. |
+| Response Composer | Merges all partial outputs into one structured answer. |
+| Azure AI Foundry | Provides model responses and optional web-search grounding. |
 
 ### Runtime Flow
 
-1. The student writes a natural message in the Streamlit chat.
-2. The UI sends the message to one backend endpoint.
-3. The router detects one or more intents, such as explanation, exam, study planning, career guidance, or web search.
-4. The selected agents/tools run in a controlled sequence.
-5. The response composer merges all outputs into one structured answer instead of returning disconnected blocks.
-6. The final answer is rendered back in the same chat.
+```text
+Student message
+  -> Streamlit UI
+  -> Backend API (/message)
+  -> Intent Router
+  -> Selected agents/tools
+  -> Response Composer
+  -> Final unified answer
+  -> Streamlit UI
+```
+
+The response composer is the key coordination layer: multi-intent requests do not become separate disconnected answers. They are executed in sequence and returned as one readable response.
 
 ## Project Structure
 

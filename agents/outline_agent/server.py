@@ -6,7 +6,7 @@ from a2a.server.request_handlers import DefaultRequestHandler
 from a2a.server.tasks import InMemoryTaskStore
 from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 from dotenv import load_dotenv
-from outline_agent.agent_executor import create_foundry_agent_executor
+from agents.outline_agent.agent_executor import create_foundry_agent_executor
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse

@@ -1,5 +1,31 @@
-__pycache__/ 
-*.py[cod] 
-labenv/ 
-.env 
-.vscode/ 
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+labenv/
+
+# Local configuration
+.env
+!.env.example
+
+# Logs and runtime state
+*.log
+.data/
+student_memory.json
+
+# Tooling
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

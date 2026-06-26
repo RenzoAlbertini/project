@@ -1,181 +1,98 @@
-# AI Study Path Planner
+# AI Personal University Assistant
 
-I extended an **Azure AI Foundry** project into a full AI application for generating personalized study plans, featuring **agent-to-agent communication via A2A**, a **FastAPI/Starlette** backend, and a **Streamlit** UI.
+A unified AI assistant for students, built with Python, Streamlit, Azure AI Foundry, and A2A-compatible agent services.
 
-The app turns a learning goal into a structured study path with milestones, exercises, checkpoints, and a final mini project. It includes a Streamlit interface, a direct Study Planner endpoint, and a routing agent that can communicate with remote A2A agents.
-
-## Demo
-
-This repository includes the application code, architecture notes, setup instructions, UI previews, and real sample outputs. The Streamlit app itself runs as a Python service, so GitHub can show the project but cannot host the live interactive backend directly from the README.
-
-UI preview:
-
-![AI Study Path Planner UI](docs/images/2.png)
-
-Generated output preview:
-
-### Study plan generated
-
-# Intermediate Personal Finance Management & Conscious Investing Study Plan
-
-**Duration:** 5 Weeks
-
----
-
-## Introduction
-
-Personal finance management and conscious investing are essential skills for achieving financial stability and long-term wealth. Understanding how to budget effectively, save consistently, and make thoughtful investment decisions enables you to take control of your financial future.
-
-In today’s world, financial literacy can directly impact your quality of life and opportunities. Learning these skills is an important step toward independence and smarter financial decisions.
-
----
-
-## Week 1: Foundations of Personal Finance
-**Goal:** Understand core concepts of managing personal finances and track your money.
-
-### Topics Covered
-- What is personal finance?
-- Importance of financial literacy (National Endowment for Financial Education → https://www.nefe.org)
-- Income vs expenses
-- Creating and maintaining a simple budget
-
-### Activities
-- Read: Personal Finance Basics (Investopedia → https://www.investopedia.com)
-- Watch: Budgeting 101 (Khan Academy → https://www.khanacademy.org)
-- Exercise: Track all expenses for one week using a spreadsheet or budgeting app
-
----
-
-## Week 2: Saving Strategies & Emergency Funds
-**Goal:** Learn effective saving methods and understand the role of emergency funds.
-
-### Topics Covered
-- Short-term vs long-term financial goals
-- Saving strategies (automatic transfers, percentage-based saving)
-- Emergency funds (Consumer Financial Protection Bureau → https://www.consumerfinance.gov)
-- Smart banking (interest rates, account types)
-
-### Activities
-- Read: Saving Money Strategies (NerdWallet → https://www.nerdwallet.com)
-- Set up an automatic savings plan or increase savings rate
-- Calculate your emergency fund target based on monthly expenses
-
----
-
-## Week 3: Conscious Spending and Debt Management
-**Goal:** Learn how to manage spending and handle debt responsibly.
-
-### Topics Covered
-- Needs vs wants analysis (Federal Trade Commission → https://www.ftc.gov)
-- Reducing unnecessary expenses
-- Types of debt (credit cards, loans, mortgages)
-- Debt repayment strategies (snowball vs avalanche method)
-
-### Activities
-- Read: How to Manage Debt (MoneyHelper UK → https://www.moneyhelper.org.uk)
-- Create a needs vs wants spending breakdown
-- Apply a debt repayment strategy
-
----
-
-## Week 4: Introduction to Conscious Investing
-**Goal:** Understand basic investment instruments and responsible investing.
-
-### Topics Covered
-- Stocks, bonds, ETFs
-- Risk tolerance and time horizon (SEC Investor Education → https://www.investor.gov)
-- ESG investing (Morningstar → https://www.morningstar.com)
-- How to start investing safely
-
-### Activities
-- Read: Investing 101 (Robinhood Learn → https://learn.robinhood.com)
-- Research 2–3 ESG funds
-- Assess your personal risk tolerance via questionnaires
-
----
-
-## Week 5: Building a Long-Term Plan
-**Goal:** Combine all concepts into a personal financial roadmap.
-
-### Topics Covered
-- Financial goal setting
-- Diversified portfolio creation
-- Budget, savings, and investment tracking
-- Long-term planning and review
-
-### Activities
-- Read: How to Build a Long-Term Portfolio (Fidelity Investments → https://www.fidelity.com)
-- Draft a personal financial plan
-- Review with mentor or peer
-
+The app exposes one main chat interface. Users can ask naturally for explanations, exam practice, study planning, web research with sources, or career guidance. The UI detects all relevant intents, executes them in sequence, and merges the result into one structured response.
 
 ## Features
 
-- Generates structured study plans from a natural-language learning goal.
-- Supports difficulty and duration customization from the UI.
-- Adds weekly milestones, exercises, checkpoints, and self-assessment questions.
-- Uses Azure AI Foundry with Azure Identity authentication.
-- Exposes a direct `/message` endpoint for the Streamlit UI.
-- Includes A2A-compatible title/study, outline, and routing agents.
-- Provides health checks for each local backend service.
-- Includes a download feature so users can save generated study plans for offline access and later review.
-  
+- Unified chat-first Streamlit UI.
+- Multi-intent routing for combined requests.
+- Structured response sections:
+  - Explanation
+  - Exam Question
+  - Study Plan
+- Exam simulator with one-question-at-a-time flow and answer evaluation.
+- Study planner with weekly milestones, practice work, and checkpoints.
+- Career advisor for skills, portfolio projects, CV/interview preparation.
+- Azure Foundry Responses API integration.
+- Azure Foundry web search tool integration with source citations.
+- A2A-compatible local agent services:
+  - University Assistant agent
+  - Outline agent
+  - Routing agent
+- Lightweight local memory for weak topics and exam progress.
+
 ## Architecture
 
 ```mermaid
 graph TD
-    UI["Streamlit UI"] -->|POST /message| Direct["Study Planner Agent"]
-    UI -->|Optional POST /message| Router["Routing Agent"]
-    Router -->|A2A| Study["Study Planner A2A Agent"]
-    Router -->|A2A| Outline["Outline A2A Agent"]
-    Direct --> Foundry["Azure AI Foundry Agent Endpoint"]
-    Study --> Foundry
-    Outline --> AzureAgents["Azure AI Agents Service"]
-    Foundry --> Model["gpt-4.1"]
+    UI["ui/app.py Streamlit Chat"] --> Router["core/router.py"]
+    Router --> Planner["Study Planner Prompt"]
+    Router --> Exam["Exam Simulator Prompt"]
+    Router --> Tutor["Tutor/Explanation Prompt"]
+    Router --> Career["Career Advisor Prompt"]
+    Router --> Web["tools/web_search.py"]
+    UI --> Direct["University Assistant /message"]
+    UI --> OptionalRouter["Routing Agent /message"]
+    Direct --> Foundry["Azure Foundry Responses API"]
+    Web --> FoundryWeb["Azure Foundry Web Search Tool"]
+    OptionalRouter --> A2A["A2A Remote Agents"]
 ```
 
 ## Project Structure
 
 ```text
 python/
-|-- web_ui.py                  # Streamlit interface
-|-- run_all.py                 # Starts the local backend services and UI
-|-- client.py                  # CLI client for the routing agent
-|-- title_agent/
-|   |-- server.py              # Study Planner A2A server + direct /message endpoint
-|   |-- agent_executor.py      # A2A task execution logic
-|   |-- foundry_client.py      # Azure Foundry Responses API client
-|   `-- agent.py               # Azure AI Agents implementation
-|-- outline_agent/
-|   |-- server.py              # Outline A2A server
-|   |-- agent_executor.py      # Outline A2A execution logic
-|   `-- agent.py               # Azure AI Agents implementation
-|-- routing_agent/
-|   |-- server.py              # FastAPI routing endpoint
-|   `-- agent.py               # Routing agent and A2A client logic
+|-- main.py                    # Primary local entry point
+|-- run_all.py                 # Backward-compatible runner
 |-- requirements.txt
-`-- .env.example
+|-- README.md
+|-- agents/
+|   |-- title_agent/           # University Assistant A2A + direct endpoint
+|   |-- outline_agent/         # Outline A2A agent
+|   `-- routing_agent/         # Foundry routing agent + A2A client
+|-- core/
+|   |-- router.py              # Multi-intent routing logic
+|   |-- prompts.py             # Prompt builders
+|   `-- memory.py              # Lightweight local JSON memory
+|-- tools/
+|   |-- web_search.py          # Azure Foundry web search integration
+|   `-- client.py              # Optional CLI client
+|-- ui/
+|   `-- app.py                 # Unified Streamlit chat UI
+|-- config/
+|   |-- settings.py            # Shared paths and env helpers
+|   `-- .env.example           # Example local configuration
+`-- docs/
+    `-- images/
 ```
 
-## Setup
-
-### Prerequisites
+## Prerequisites
 
 - Python 3.10+
 - Azure subscription with Azure AI Foundry access
 - Azure CLI authenticated with `az login`
-- A deployed Azure AI Foundry agent/model
+- Azure Foundry project and model deployment
+- Azure Foundry web search support enabled for the model/project if you want live web search
 
-### Install
+## Setup
+
+From this folder:
 
 ```powershell
-cd Labfiles\09-build-remote-agents-with-a2a\python
 python -m venv labenv
 .\labenv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-Create a `.env` file from `.env.example` and update the Azure values:
+Create your local `.env` from the example:
+
+```powershell
+Copy-Item config\.env.example .env
+```
+
+Update `.env` with your Azure Foundry values:
 
 ```env
 SERVER_URL=localhost
@@ -183,97 +100,83 @@ TITLE_AGENT_PORT=10007
 OUTLINE_AGENT_PORT=10008
 ROUTING_AGENT_PORT=10009
 
-FOUNDRY_AGENT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project/agents/your-agent/endpoint/protocols/openai/responses
-FOUNDRY_API_VERSION=v1
-FOUNDRY_AGENT_MODEL=gpt-4.1
 PROJECT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project
 MODEL_DEPLOYMENT_NAME=gpt-4.1
+FOUNDRY_AGENT_ENDPOINT=https://your-resource.services.ai.azure.com/api/projects/your-project/openai/v1/responses
+FOUNDRY_API_VERSION=v1
+FOUNDRY_AGENT_MODEL=gpt-4.1
 ```
 
-## Run Locally
+Do not commit `.env`. It is ignored by `.gitignore`.
+
+## Run
 
 ```powershell
-cd Labfiles\09-build-remote-agents-with-a2a\python
-.\labenv\Scripts\Activate.ps1
-python run_all.py
+python main.py
 ```
 
-Open the UI:
+Then open:
 
 ```text
 http://localhost:8501
 ```
 
-Expected local services:
+The runner starts:
 
-- Study Planner agent: `http://localhost:10007`
-- Outline agent: `http://localhost:10008`
-- Routing agent: `http://localhost:10009`
+- University Assistant: `http://localhost:10007`
+- Outline Agent: `http://localhost:10008`
+- Routing Agent: `http://localhost:10009`
 - Streamlit UI: `http://localhost:8501`
 
-## API Test
+`python run_all.py` still works as a compatibility wrapper.
 
-Health check:
+## Example Prompts
 
-```powershell
-Invoke-WebRequest -UseBasicParsing http://localhost:10007/health
+```text
+Explain Azure AI agents, ask me an exam question, and make a study plan.
 ```
 
-Generate a study plan:
-
-```powershell
-$body = @{
-  message = "Create an intermediate study plan for Azure AI agents. Duration: 4 weeks."
-} | ConvertTo-Json
-
-Invoke-WebRequest `
-  -UseBasicParsing `
-  -Uri "http://localhost:10007/message" `
-  -Method Post `
-  -Body $body `
-  -ContentType "application/json"
+```text
+Create a 6-week beginner study plan for machine learning.
 ```
 
-## Security Notes
+```text
+Simulate an exam on Azure AI Foundry agents.
+```
 
-- `.env` is intentionally ignored by Git.
-- Azure credentials are not stored in the repository.
-- The app uses Azure Identity and your authenticated Azure CLI/session.
-- For a public hosted demo, use managed identity or secret storage instead of local `az login`.
+```text
+Search online for the latest Azure AI Foundry agent documentation with 3 sources.
+```
 
-## Deployment
+```text
+Give me career advice for becoming an AI engineer and suggest portfolio projects.
+```
 
-The current version is designed to run locally with Azure credentials and local backend services. For a public demo, the main decision is where to run the Python services and how to handle Azure authentication securely.
+## Multi-Intent Behavior
 
-### Static GitHub Showcase
+If a request contains multiple tasks, the assistant does not return separate independent mode blocks. It detects all intents, runs them in sequence, and merges the result into one response using these sections:
 
-The repository includes UI previews under `docs/images/` and sample generations in [docs/demo-output.md](docs/demo-output.md). This is the simplest way to show the project on GitHub and LinkedIn without exposing Azure credentials or maintaining a public server.
+```text
+Explanation
+Exam Question
+Study Plan
+```
 
-This option is not interactive, but it clearly shows the interface, the architecture, and the kind of output the agent produces.
+Career and web-search outputs are merged into the Explanation section so the final answer stays readable.
 
-### Streamlit Community Cloud
+## Local State
 
-Streamlit Community Cloud can host the UI, but the Azure settings must be moved to Streamlit Secrets and the backend endpoints need to be reachable from the public app. For this project, that likely means either deploying the API services separately or simplifying the demo into a single hosted Streamlit application.
+The app stores lightweight memory under:
 
-### Azure App Service or Azure Container Apps
+```text
+.data/student_memory.json
+```
 
-For a more complete deployment, the Streamlit UI and backend services can be packaged and hosted on Azure. Managed Identity is the preferred approach for connecting to Azure AI Foundry without hardcoded keys. This would provide a public URL that can be linked from GitHub or LinkedIn.
+This file is generated automatically and ignored by Git.
 
-## Example Use Cases
+## GitHub Notes
 
-- Generate a 4-week plan for learning Azure AI agents.
-- Create an intermediate machine learning study roadmap.
-- Produce milestones, exercises, checkpoints, and project ideas for a technical topic.
+- `.env`, logs, local memory, virtual environments, and cache folders are ignored.
+- Keep `config/.env.example` updated when adding new configuration values.
+- Use `main.py` as the primary entry point.
 
-## Built With
-
-- Python
-- Streamlit
-- FastAPI / Starlette
-- Azure AI Foundry
-- Azure Identity
-- A2A protocol
-
-## Project Note
-
-Built by **Renzo Albertini** as a personal learning and portfolio project. AI assistance has been used.

@@ -19,8 +19,12 @@ class FoundryClient:
 
     def run(self, message: str, instructions: str | None = None) -> str:
         """Send message to Foundry agent and return text response."""
+        return self._run_with_endpoint(self.endpoint, message, instructions)
+
+    def _run_with_endpoint(self, endpoint: str, message: str, instructions: str | None = None) -> str:
         input_text = message
-        use_agent_endpoint = "/agents/" in self.endpoint.replace("\\", "/")
+        normalized_endpoint = endpoint.replace("\\", "/")
+        use_agent_endpoint = "/agents/" in normalized_endpoint
         if instructions and use_agent_endpoint:
             input_text = f"{instructions}\n\nUser request:\n{message}"
 
@@ -33,8 +37,8 @@ class FoundryClient:
 
         token = self.credential.get_token("https://ai.azure.com/.default").token
         response = requests.post(
-            self.endpoint,
-            params={"api-version": self.api_version},
+            endpoint,
+            params=self._request_params(endpoint),
             headers={
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json",
@@ -43,6 +47,10 @@ class FoundryClient:
             timeout=120,
         )
         if not response.ok:
+            fallback_endpoint = self._fallback_responses_endpoint(endpoint, response)
+            if fallback_endpoint:
+                return self._run_with_endpoint(fallback_endpoint, message, instructions)
+
             raise RuntimeError(
                 f"Foundry request failed with HTTP {response.status_code}: {response.text}"
             )
@@ -60,3 +68,19 @@ class FoundryClient:
                     texts.append(text)
 
         return "\n".join(texts).strip()
+
+    def _request_params(self, endpoint: str) -> dict[str, str]:
+        if "/openai/v1/" in endpoint.replace("\\", "/"):
+            return {}
+        return {"api-version": self.api_version}
+
+    def _fallback_responses_endpoint(self, endpoint: str, response: requests.Response) -> str | None:
+        """Fallback from a stale agent endpoint to the project-level Responses API."""
+        if response.status_code != 404 or "/agents/" not in endpoint.replace("\\", "/"):
+            return None
+
+        project_endpoint = os.getenv("PROJECT_ENDPOINT")
+        if not project_endpoint:
+            return None
+
+        return f"{project_endpoint.rstrip('/')}/openai/v1/responses"

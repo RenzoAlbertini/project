@@ -2,20 +2,30 @@
 
 from __future__ import annotations
 
+import logging
+
 from a2a.server.events.event_queue import EventQueue
 from a2a.server.agent_execution import AgentExecutor
 from a2a.server.agent_execution.context import RequestContext
 from a2a.server.tasks import TaskUpdater
 from a2a.utils import new_agent_text_message
 from a2a.types import AgentCard, Part, TaskState
-from title_agent.foundry_client import FoundryClient
+from agents.title_agent.foundry_client import FoundryClient
 
-STUDY_PLAN_INSTRUCTIONS = (
-    'You are a study plan assistant with an encouraging, clear, and professional tone, like a university tutor or senior developer. '
-    'At the beginning of each plan, write a brief introduction explaining why that topic matters in the real world. '
-    'Generate only the requested study plan. Do not save files. '
-    'Conclude the plan completely and ready to copy to a text file, but do not ask for saving.'
+logger = logging.getLogger(__name__)
+
+UNIVERSITY_ASSISTANT_INSTRUCTIONS = (
+    'You are an AI Personal University Assistant with an encouraging, clear, and professional tone. '
+    'Help students with study planning, exam practice, tutoring, and career guidance. '
+    'When creating study plans, use a simple weekly structure with milestones, practice work, and checkpoints. '
+    'When simulating exams, ask one question at a time unless the user asks for evaluation. '
+    'When evaluating answers, provide a numeric score, concise feedback, weak topics, and a model answer. '
+    'When giving career advice, suggest practical skills, portfolio projects, and short action plans. '
+    'Do not claim to browse the web or cite sources unless the user provides web search results in the prompt. '
+    'Keep responses structured and ready to use.'
 )
+
+STUDY_PLAN_INSTRUCTIONS = UNIVERSITY_ASSISTANT_INSTRUCTIONS
 
 
 class FoundryAgentExecutor(AgentExecutor):
@@ -85,7 +95,7 @@ class FoundryAgentExecutor(AgentExecutor):
             )
 
         except Exception as e:
-            print(f'Study Planner: Error processing request - {e}')
+            logger.exception('University Assistant failed to process the request')
             await task_updater.failed(
                 message=new_agent_text_message(
                     f'Study Planner failed to process the request: {e}',
@@ -115,7 +125,7 @@ class FoundryAgentExecutor(AgentExecutor):
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue):
         """Cancel study plan generation request."""
-        print(f'Study Planner: Cancelling execution for context {context.context_id}')
+        logger.info('Cancelling University Assistant execution for context %s', context.context_id)
 
         updater = TaskUpdater(
             event_queue,

@@ -1,10 +1,13 @@
-""" Azure AI Foundry Agent that generates an outline """
+"""Azure AI Foundry agent that generates outlines."""
 
+import logging
 import os
 
 from azure.ai.agents import AgentsClient
 from azure.ai.agents.models import Agent, MessageRole, ListSortOrder
 from azure.identity import DefaultAzureCredential
+
+logger = logging.getLogger(__name__)
 
 class OutlineAgent:
 
@@ -51,7 +54,7 @@ class OutlineAgent:
         run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
 
         if run.status == 'failed':
-            print(f'Title Agent: Run failed - {run.last_error}')
+            logger.error('Outline Agent run failed: %s', run.last_error)
             return [f'Error: {run.last_error}']
 
         # Get response messages

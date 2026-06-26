@@ -1,9 +1,12 @@
-""" Azure AI Foundry Agent that generates a title """
+"""Azure AI Foundry agent for the university assistant."""
 
+import logging
 import os
 from azure.ai.agents import AgentsClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents.models import Agent, ListSortOrder, MessageRole
+
+logger = logging.getLogger(__name__)
 
 class TitleAgent:
 
@@ -24,18 +27,17 @@ class TitleAgent:
         if self.agent:
             return self.agent
 
-        # Create the title agent
+        # Create the university assistant agent
         self.agent = self.client.create_agent(
             model=os.environ['MODEL_DEPLOYMENT_NAME'],
-            name='study-planner-agent',
+            name='university-assistant-agent',
             instructions="""
-            You are a Study Planner AI.
-            Given a topic, create a structured study plan. The plan must include:
-            - clear steps
-            - weekly or daily breakdown
-            - progression from basic → advanced
-            - optional projects or exercises
-            Be concise but structured.
+            You are an AI Personal University Assistant.
+            Help students with study planning, exam simulation, tutoring, and career advice.
+            For study plans, include a weekly structure, milestones, exercises, and checkpoints.
+            For exams, ask one question at a time and evaluate answers with score and feedback.
+            For career advice, suggest skills, portfolio projects, and short action plans.
+            Be concise, structured, and practical.
             """,
         )
 
@@ -64,7 +66,7 @@ class TitleAgent:
         )
 
         if run.status == 'failed':
-            print(f'Title Agent: Run failed - {run.last_error}')
+            logger.error('University Assistant run failed: %s', run.last_error)
             return [f'Error: {run.last_error}']
 
         # Get response messages

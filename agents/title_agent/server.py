@@ -11,8 +11,8 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Route
 
-from title_agent.agent_executor import STUDY_PLAN_INSTRUCTIONS, create_foundry_agent_executor
-from title_agent.foundry_client import FoundryClient
+from agents.title_agent.agent_executor import STUDY_PLAN_INSTRUCTIONS, create_foundry_agent_executor
+from agents.title_agent.foundry_client import FoundryClient
 
 load_dotenv()
 
@@ -33,14 +33,33 @@ skills = [
             'I want to learn React step by step',
         ],
     ),
+    AgentSkill(
+        id='simulate_exam',
+        name='Simulate Exam',
+        description='Asks exam questions one by one and evaluates student answers.',
+        tags=['exam', 'assessment', 'feedback'],
+        examples=[
+            'Ask me an intermediate exam question about neural networks.',
+            'Evaluate my answer and tell me what to review.',
+        ],
+    ),
+    AgentSkill(
+        id='career_advice',
+        name='Career Advice',
+        description='Suggests skills, project ideas, and learning actions for a target role.',
+        tags=['career', 'skills', 'projects'],
+        examples=[
+            'How should I prepare for an AI engineer role?',
+        ],
+    ),
 ]
 
 # Configure agent card for A2A service discovery
 agent_card = AgentCard(
-    name='Microsoft Foundry Study Planner Agent',
+    name='Microsoft Foundry University Assistant Agent',
     description=(
-        'An intelligent study planner agent powered by Foundry. '
-        'It generates structured learning paths for any topic.'
+        'An intelligent university assistant powered by Foundry. '
+        'It supports study planning, exam practice, tutoring, and career guidance.'
     ),
     url=f'http://{host}:{port}/',
     version='1.0.0',
@@ -74,7 +93,7 @@ direct_foundry_client: FoundryClient | None = None
 # Health check endpoint
 async def health_check(request: Request) -> PlainTextResponse:
     """Health check endpoint for service monitoring."""
-    return PlainTextResponse('Study Planner Agent is running!')
+    return PlainTextResponse('University Assistant Agent is running!')
 
 
 async def handle_message(request: Request) -> JSONResponse:
@@ -97,7 +116,7 @@ async def handle_message(request: Request) -> JSONResponse:
         return JSONResponse({"response": response or "No response from agent."})
     except Exception as exc:
         return JSONResponse(
-            {"error": f"Study Planner failed to process the request: {exc}"},
+            {"error": f"University Assistant failed to process the request: {exc}"},
             status_code=500,
         )
 

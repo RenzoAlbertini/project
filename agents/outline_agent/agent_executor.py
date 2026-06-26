@@ -1,4 +1,6 @@
-""" Azure AI Foundry Agent that generates an outline """
+"""Azure AI Foundry agent executor that generates outlines."""
+
+import logging
 
 from a2a.server.agent_execution import AgentExecutor
 from a2a.server.agent_execution.context import RequestContext
@@ -6,7 +8,9 @@ from a2a.server.events.event_queue import EventQueue
 from a2a.server.tasks import TaskUpdater
 from a2a.types import AgentCard, Part, TaskState
 from a2a.utils.message import new_agent_text_message
-from outline_agent.agent import OutlineAgent, create_foundry_outline_agent
+from agents.outline_agent.agent import OutlineAgent, create_foundry_outline_agent
+
+logger = logging.getLogger(__name__)
 
 # An AgentExecutor that runs Azure AI Foundry-based agents. Adapted from the ADK agent executor pattern.
 class OutlineAgentExecutor(AgentExecutor):
@@ -71,7 +75,7 @@ class OutlineAgentExecutor(AgentExecutor):
         await self._process_request(context.message.parts, context.context_id, updater)
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue):
-        print(f'Outline Agent: Cancelling execution for context {context.context_id}')
+        logger.info('Cancelling Outline Agent execution for context %s', context.context_id)
 
         updater = TaskUpdater(event_queue, context.task_id, context.context_id)
         await updater.failed(

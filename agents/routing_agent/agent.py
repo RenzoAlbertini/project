@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 import uuid
 import httpx
@@ -24,6 +25,7 @@ from a2a.types import (
 )
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 TaskCallbackArg = Task | TaskStatusUpdateEvent | TaskArtifactUpdateEvent
 TaskUpdateCallback = Callable[[TaskCallbackArg, AgentCard], Task]
@@ -95,10 +97,10 @@ class RoutingAgent:
                     self.remote_agent_connections[card.name] = remote_connection
                     self.cards[card.name] = card
 
-                except Exception as e:
-                    print(f"ERROR initializing {address}: {e}")
+                except Exception as exc:
+                    logger.warning("Failed to initialize remote agent at %s: %s", address, exc)
 
-        print(f"Found remote agents: {self.list_remote_agents()}")
+        logger.info("Found remote agents: %s", self.list_remote_agents())
 
     async def send_message(self, agent_name: str, task: str):
 
@@ -130,11 +132,11 @@ class RoutingAgent:
         )
 
         if not isinstance(send_response.root, SendMessageSuccessResponse):
-            print("Non-success response")
+            logger.warning("Remote A2A agent returned a non-success response")
             return
 
         if not isinstance(send_response.root.result, Task):
-            print("Non-task response")
+            logger.warning("Remote A2A agent returned a non-task response")
             return
 
         return send_response.root.result

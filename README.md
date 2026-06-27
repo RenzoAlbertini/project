@@ -10,6 +10,7 @@ The app exposes one main chat interface. Users can ask naturally for explanation
 
 👉 [Open demo-output.md](./docs/demo-output.md)
 
+
 ## Features
 
 - Unified chat-first Streamlit UI.
